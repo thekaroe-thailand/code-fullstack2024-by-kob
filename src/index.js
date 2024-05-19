@@ -6,6 +6,7 @@ import {
 } from 'react-router-dom';
 import SingIn from './pages/backoffice/SingIn';
 import Home from './pages/backoffice/Home';
+import Product from './pages/backoffice/Product';
 
 const router = createBrowserRouter([
   {
@@ -15,6 +16,10 @@ const router = createBrowserRouter([
   {
     path: '/home',
     element: <Home />
+  },
+  {
+    path: '/product',
+    element: <Product />
   }
 ]);
 

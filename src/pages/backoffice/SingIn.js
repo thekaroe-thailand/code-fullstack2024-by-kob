@@ -6,6 +6,7 @@ import { useNavigate } from 'react-router-dom';
 
 function SingIn() {
   const [user, setUser] = useState({});
+
   const navigate = useNavigate();
 
   const handleSingIn = async () => {
@@ -47,10 +48,9 @@ function SingIn() {
             <div>
               <div class="input-group mb-3">
                 <input
-                  type="email"
                   class="form-control"
-                  placeholder="Email"
-                  onChage={e => setUser({ ...user, user: e.target.value })}
+                  placeholder="username"
+                  onChange={e => setUser({ ...user, user: e.target.value})}
                 />
                 <div class="input-group-append">
                   <div class="input-group-text">
@@ -63,7 +63,7 @@ function SingIn() {
                   type="password"
                   class="form-control"
                   placeholder="Password"
-                  onChange={e => setUser({ ...user, pass: e.target.value })}
+                  onChange={e => setUser({ ...user, pass: e.target.value})}
                 />
                 <div class="input-group-append">
                   <div class="input-group-text">
