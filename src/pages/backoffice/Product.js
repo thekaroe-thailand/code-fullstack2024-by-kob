@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import BackOffice from "../../components/BackOffice";
 import MyModal from "../../components/MyModal";
 import Swal from "sweetalert2";
@@ -9,6 +9,9 @@ function Product() {
     const [product, setProduct] = useState({}); // CREATE, UPDATE
     const [products, setProducts] = useState([]); // SHOW
     const [img, setImg] = useState({}); // File for Upload
+    const [fileExcel, setFileExcel] = useState({}); // File for Excel
+    const refImg = useRef();
+    const refExcel = useRef();
 
     useEffect(() => {
         fetchData();
@@ -97,6 +100,8 @@ function Product() {
             price: '',
             cost: ''
         })
+        setImg(null);
+        refImg.current.value = '';
     }
 
     const handleRemove = async (item) => {
@@ -148,19 +153,65 @@ function Product() {
         return <></>;
     }
 
+    const selectedFileExcel = (fileInput) => {
+        if (fileInput !== undefined) {
+            if (fileInput.length > 0) {
+                setFileExcel(fileInput[0]);
+            }
+        }
+    }
+
+    const handleUploadExcel = async () => {
+        try {
+            const formData = new FormData();
+            formData.append('fileExcel', fileExcel);
+
+            const res = await axios.post(config.apiPath + '/product/uploadFromExcel', formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                    'Authorization': localStorage.getItem('token')
+                }
+            });
+
+            if (res.data.message === 'success') {
+                Swal.fire({
+                    title: 'upload file',
+                    text: 'upload success',
+                    icon: 'success',
+                    timer: 1000
+                });
+
+                fetchData();
+
+                document.getElementById('modalExcel_btnClose').click();
+            }
+        } catch (e) {
+            Swal.fire({
+                title: 'error',
+                text: e.message,
+                icon: 'error'
+            })
+        }
+    }
+
+    const clearFormExcel = () => {
+        refExcel.current.value = '';
+        setFileExcel(null);
+    }
+
     return <BackOffice>
         <div className="h4">Product</div>
         <button onClick={clearForm} className="btn btn-primary mr-2" data-toggle='modal' data-target='#modalProduct'>
             <i className="fa fa-plus mr-2"></i>เพิ่มรายการ
         </button>
-        <button className="btn btn-success">
+        <button onClick={clearFormExcel} className="btn btn-success" data-toggle='modal' data-target='#modalExcel'>
             <i className="fa fa-arrow-down mr-2"></i>Import from Excel
         </button>
 
         <table className="mt-3 table table-bordered table-striped">
             <thead>
                 <tr>
-                    <th>ภาพสินค้า</th>
+                    <th width='150px'>ภาพสินค้า</th>
                     <th>name</th>
                     <th width='150px' className="text-right">cost</th>
                     <th width='150px' className="text-right">price</th>
@@ -205,13 +256,22 @@ function Product() {
             </div>
             <div className="mt-3">
                 <div>ภาพสินค้า</div>
-                <input className="form-control" type="file" onChange={e => selectedFile(e.target.files)} />
+                <input className="form-control" type="file" ref={refImg} onChange={e => selectedFile(e.target.files)} />
             </div>
             <div className="mt-3">
                 <button className="btn btn-primary" onClick={handleSave}>
                     <i className="fa fa-check mr-2"></i>Save
                 </button>
             </div>
+        </MyModal>
+
+        <MyModal id='modalExcel' title='เลือกไฟล์'>
+            <div>เลือกไฟล์</div>
+            <input className="form-control" type="file" ref={refExcel} onChange={e => selectedFileExcel(e.target.files)} />
+
+            <button className="mt-3 btn btn-primary" onClick={handleUploadExcel}>
+                <i className="fa fa-check mr-2"></i>Save
+            </button>
         </MyModal>
     </BackOffice>
 }
