@@ -255,6 +255,7 @@ function Product() {
                 <input value={product.price} className="form-control" onChange={e => setProduct({ ...product, price: e.target.value })} />
             </div>
             <div className="mt-3">
+                <div className="mb-3">{showImage(product)}</div>
                 <div>ภาพสินค้า</div>
                 <input className="form-control" type="file" ref={refImg} onChange={e => selectedFile(e.target.files)} />
             </div>
