@@ -64,7 +64,7 @@ function Sidebar() {
                         <img src="dist/img/user2-160x160.jpg" class="img-circle elevation-2" alt="User Image" />
                     </div>
                     <div class="info">
-                        <a href="#" class="d-block">{user.name}</a> 
+                        <a href="#" class="d-block">{user.name}</a>
                         <button onClick={handleSignOut} className="btn btn-danger">
                             <i className="fa fa-times mr-2"></i> Sign Out
                         </button>
@@ -84,12 +84,12 @@ function Sidebar() {
                             </Link>
                         </li>
                         <li class="nav-item">
-                            <a href="pages/gallery.html" class="nav-link">
-                                <i class="nav-icon far fa-image"></i>
+                            <Link to="/billSale" class="nav-link">
+                                <i class="nav-icon fa fa-list"></i>
                                 <p>
-                                    Gallery
+                                    รายงานยอดขาย
                                 </p>
-                            </a>
+                            </Link>
                         </li>
                         <li class="nav-item">
                             <a href="pages/kanban.html" class="nav-link">
