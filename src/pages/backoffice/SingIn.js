@@ -33,6 +33,8 @@ function SingIn() {
       }
     }
   }
+
+  //document.body.style = 'background-color: red';
   return (
     <div class="hold-transition login-page">
       <div class="login-box">
@@ -50,7 +52,7 @@ function SingIn() {
                 <input
                   class="form-control"
                   placeholder="username"
-                  onChange={e => setUser({ ...user, user: e.target.value})}
+                  onChange={e => setUser({ ...user, user: e.target.value })}
                 />
                 <div class="input-group-append">
                   <div class="input-group-text">
@@ -63,7 +65,7 @@ function SingIn() {
                   type="password"
                   class="form-control"
                   placeholder="Password"
-                  onChange={e => setUser({ ...user, pass: e.target.value})}
+                  onChange={e => setUser({ ...user, pass: e.target.value })}
                 />
                 <div class="input-group-append">
                   <div class="input-group-text">
