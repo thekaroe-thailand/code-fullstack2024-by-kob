@@ -55,6 +55,117 @@ function BillSale() {
         }
     }
 
+    const handlePay = async (item) => {
+        try {
+            const button = await Swal.fire({
+                title: 'ยืนยันการชำระเงิน',
+                text: 'คุณได้รับการชำระเงิน และตรวจสอบข้อมูลแล้ว',
+                icon: 'question',
+                showCancelButton: true,
+                showConfirmButton: true
+            });
+
+            if (button.isConfirmed) {
+                const res = await axios.get(config.apiPath + '/api/sale/updateStatusToPay/' + item.id, config.headers());
+
+                if (res.data.message === 'success') {
+                    Swal.fire({
+                        title: 'save',
+                        text: 'บันทึกข้อมูลแล้ว',
+                        icon: 'success',
+                        timer: 1000
+                    })
+
+                    fetchData();
+                }
+            }
+        } catch (e) {
+            Swal.fire({
+                title: 'error',
+                text: e.message,
+                icon: 'error'
+            })
+        }
+    }
+
+    const handleSend = async (item) => {
+        try {
+            const button = await Swal.fire({
+                title: 'ยืนยันการจัดส่งสินค้า',
+                text: 'คุณต้องการบันทึกว่าจัดส่งสินค้าแล้ว',
+                icon: 'question',
+                showCancelButton: true,
+                showConfirmButton: true
+            });
+
+            if (button.isConfirmed) {
+                const res = await axios.get(config.apiPath + '/api/sale/updateStatusToSend/' + item.id, config.headers());
+
+                if (res.data.message === 'success') {
+                    Swal.fire({
+                        title: 'save',
+                        text: 'บันทึกข้อมูลแล้ว',
+                        icon: 'success',
+                        timer: 1000
+                    })
+
+                    fetchData();
+                }
+            }
+        } catch (e) {
+            Swal.fire({
+                title: 'error',
+                text: e.message,
+                icon: 'error'
+            })
+        }
+    }
+
+    const handleCancel = async (item) => {
+        try {
+            const button = await Swal.fire({
+                title: 'ยืนยันการยกเลิก',
+                text: 'คุณต้องการยกเลิกรายการบิลนี้ทั้งหมด',
+                icon: 'question',
+                showCancelButton: true,
+                showConfirmButton: true
+            });
+
+            if (button.isConfirmed) {
+                const res = await axios.get(config.apiPath + '/api/sale/updateStatusToCancel/' + item.id, config.headers());
+
+                if (res.data.message === 'success') {
+                    Swal.fire({
+                        title: 'save',
+                        text: 'บันทึกข้อมูลแล้ว',
+                        icon: 'success',
+                        timer: 1000
+                    })
+
+                    fetchData();
+                }
+            }
+        } catch (e) {
+            Swal.fire({
+                title: 'error',
+                text: e.message,
+                icon: 'error'
+            })
+        }
+    }
+
+    const displayStatusText = (item) => {
+        if (item.status === 'wait') {
+            return <div className="badge bg-dark">รอตรวจสอบ</div>
+        } else if (item.status === 'pay') {
+            return <div className="badge bg-success">ชำระแล้ว</div>
+        } else if (item.status === 'send') {
+            return <div className="badge bg-info">จัดส่งแล้ว</div>
+        } else if (item.status === 'cancel') {
+            return <div className="badge bg-danger">ยกเลิกรายการ</div>
+        }
+    }
+
     return <BackOffice>
         <div className="card">
             <div className="card-header">
@@ -68,6 +179,7 @@ function BillSale() {
                         <th>ที่อยู่</th>
                         <th>วันที่ชำระเงิน</th>
                         <th>เวลา</th>
+                        <th>สถานะ</th>
                         <th width='480px'></th>
                     </thead>
                     <tbody>
@@ -78,6 +190,7 @@ function BillSale() {
                                 <td>{item.customerAddress}</td>
                                 <td>{dayjs(item.payDate).format('DD/MM/YYYY')}</td>
                                 <td>{item.payTime}</td>
+                                <td>{displayStatusText(item)}</td>
                                 <td className="text-center">
                                     <button className="btn btn-secondary mr-1"
                                         data-toggle='modal'
@@ -85,13 +198,18 @@ function BillSale() {
                                         onClick={e => openModalInfo(item)}>
                                         <i className="fa fa-file-alt mr-2"></i>รายการ
                                     </button>
-                                    <button className="btn btn-info mr-1">
+                                    <button className="btn btn-info mr-1"
+                                        onClick={e => handlePay(item)}>
                                         <i className="fa fa-check mr-2"></i>ได้รับชำระแล้ว
                                     </button>
-                                    <button className="btn btn-success mr-1">
+                                    <button className="btn btn-success mr-1"
+                                        onClick={e => handleSend(item)}
+                                    >
                                         <i className="fa fa-file mr-2"></i>จัดส่งแล้ว
                                     </button>
-                                    <button className="btn btn-danger">
+                                    <button className="btn btn-danger"
+                                        onClick={e => handleCancel(item)}
+                                    >
                                         <i className="fa fa-times mr-2"></i>ยกเลิก
                                     </button>
                                 </td>

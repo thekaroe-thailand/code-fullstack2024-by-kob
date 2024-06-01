@@ -8,6 +8,7 @@ import SingIn from './pages/backoffice/SingIn';
 import Home from './pages/backoffice/Home';
 import Product from './pages/backoffice/Product';
 import BillSale from './pages/backoffice/BillSale';
+import DashBoard from './pages/backoffice/Dashboard';
 
 const router = createBrowserRouter([
   {
@@ -25,6 +26,10 @@ const router = createBrowserRouter([
   {
     path: '/billSale',
     element: <BillSale />
+  },
+  {
+    path: '/dashboard',
+    element: <DashBoard />
   }
 ]);
 
